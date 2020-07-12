@@ -26,7 +26,7 @@ Online marketing of a Cryptography Class by using Ads
 
 ## Reading the Data
 ```{r }
-# libraries
+# plotting libraries
 library("dplyr")
 library("ggplot2")
 
@@ -174,25 +174,30 @@ The distribution of Age  is skewed to the left, the Area Income and Daily Time S
 
 The Most frequent age is between approximately 25years and 40 years
 
+
 #### BarPlots
 ```{r Barplots, echo=FALSE}
 # How many Males Vs. Females
 male <- table(advert$Male)
-barplot(male,main = "Male")
+barplot(male,main = "Male",col = topo.colors(2),ylim = c(0, 800))
+legend("topright",inset = .02, title="Gender",
+       c("Female","Male"), fill=topo.colors(2), cex=0.8)
 
 # No. of Clicked vs. Not Clicked
 clicked <- table(advert$Clicked.on.Ad)
-barplot(clicked,main = "Clicked on Ad")
+barplot(clicked,main = "Clicked on Ad",col = topo.colors(2), ylim = c(0,800))
+legend("topright",inset = .02, title="Clicked on Ad",
+       c("Not Clicked","Clicked"), fill=topo.colors(2), cex=0.8)
 
 # the most popular countries
 par(las=2, cex.axis=0.7)
 country <- table(advert$Country)
-barplot(sort(country[1:40], decreasing = TRUE), main = "Country",)
+barplot(sort(country[1:40], decreasing = TRUE), main = "Country",col = terrain.colors(20))
 
 # The most popular Age
 par(las=2)
 age <- table(advert$Age)
-barplot(sort(age[1:20], decreasing = TRUE), main = "Age",)
+barplot(sort(age[1:20], decreasing = TRUE), main = "Age",col = terrain.colors(20))
 
 # group by gender/Male
 # Gender that Spends more Time on the Internet
@@ -210,8 +215,8 @@ by_country <- advert %>% group_by(Country) %>% summarise(clicked.ad =sum(Clicked
 rows <- by_country[1:20,]
 rows
 
-c <- ggplot(rows, aes(x = reorder(Country,clicked.ad), y=clicked.ad)) + geom_col() +coord_flip() +  geom_bar(stat="identity")
-c
+c <- ggplot(rows, aes(x = reorder(Country,clicked.ad), y=clicked.ad)) + geom_col() +coord_flip() +  geom_bar(stat="identity", fill="dodgerblue")
+c + labs(title="Country with Highest Clicks on Ads", x="Countries", y="Clicked Ads")
 
 # Females that click on ads
 by_gender <- advert %>% group_by(Clicked.on.Ad) %>% summarise(gender = length(Male[Male == 0]))
@@ -284,12 +289,6 @@ Can we used to determine if a an Ad will be clicked on or not
 area.income <- advert$Area.Income
 internet.usage <- advert$Daily.Internet.Usage
 time.spent <- advert$Daily.Time.Spent.on.Site
-age <- advert$Age
-
-time.stamp <- as.character(advert$Timestamp)
-head(time.stamp)
-
-advert$mydate <- strptime(x= time.stamp, format = "%Y-%m-%d %H:%M:%S")
 
 plot(area.income, internet.usage, xlab="Area Income",ylab = "Daily Internet Usage",main = "Area Income vs Daily Internet Usage")
 plot(area.income,time.spent,xlab = "Area Income",ylab = "Daily Time Spent on the Internet",main="Area Income vs Daily Time Spent on the Internet")
@@ -299,8 +298,6 @@ plot(time.spent,internet.usage, xlab="Daily Time spent", ylab="Daily Internet Us
 The more the Area Income the more time the user spent on the Internet and also the the more internet used
 
 ## Conclusion
-The Client could concentrate on the between 35-40 age group and mostly Female users.
+The Client could concentrate on between the 35-40 age group and mostly Female users.
 
-The client could add content on the blog that attract more Male Users because the more time spent on the blog the higher the Area Income.
-
-The Ads as well should be attractive to the Male the users so that they will click on the Ads more
+I also recommend that the Client could also run Ads that are more appealing to the Male the users so that they will click on the Ads more

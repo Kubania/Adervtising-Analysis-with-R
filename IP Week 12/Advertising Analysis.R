@@ -110,18 +110,22 @@ hist(advert$Clicked.on.Ad,breaks = 10,main = "Clicked on Ad",col = "dodgerblue")
 
 # Bar Plot
 male <- table(advert$Male)
-barplot(male,main = "Male")
+barplot(male,main = "Male",col = topo.colors(2),ylim = c(0, 800))
+legend("topright",inset = .02, title="Gender",
+       c("Female","Male"), fill=topo.colors(2), cex=0.8)
 
 clicked <- table(advert$Clicked.on.Ad)
-barplot(clicked,main = "Clicked on Ad")
+barplot(clicked,main = "Clicked on Ad",col = topo.colors(2), ylim = c(0,800))
+legend("topright",inset = .02, title="Clicked on Ad",
+       c("Not Clicked","Clicked"), fill=topo.colors(2), cex=0.8)
 
 par(las=2, cex.axis=0.7)
 country <- table(advert$Country)
-barplot(sort(country[1:40], decreasing = TRUE), main = "Country",)
+barplot(sort(country[1:40], decreasing = TRUE), main = "Country",col = terrain.colors(20))
 
 par(las=2)
 age <- table(advert$Age)
-barplot(sort(age[1:20], decreasing = TRUE), main = "Age",)
+barplot(sort(age[1:20], decreasing = TRUE), main = "Age",col = terrain.colors(20))
 
 library("dplyr")
 library("ggplot2")
@@ -143,8 +147,8 @@ by_country
 rows <- by_country[1:20,]
 rows
 
-c <- ggplot(rows, aes(x = reorder(Country,clicked.ad), y=clicked.ad)) + geom_col() +coord_flip() +  geom_bar(stat="identity")
-c
+c <- ggplot(rows, aes(x = reorder(Country,clicked.ad), y=clicked.ad)) + geom_col() +coord_flip() +  geom_bar(stat="identity", fill="dodgerblue")
+c + labs(title="Country with Highest Clicks on Ads", x="Countries", y="Clicked Ads")
 
 # Females that click on ads
 by_gender <- advert %>% group_by(Clicked.on.Ad) %>% summarise(gender = length(Male[Male == 0]))
@@ -186,15 +190,7 @@ View(round(correlation_matrix,2))
 area.income <- advert$Area.Income
 internet.usage <- advert$Daily.Internet.Usage
 time.spent <- advert$Daily.Time.Spent.on.Site
-age <- advert$Age
-
-time.stamp <- as.character(advert$Timestamp)
-head(time.stamp)
-
-advert$mydate <- strptime(x= time.stamp, format = "%Y-%m-%d %H:%M:%S")
-advert$mydate
 
 plot(area.income, internet.usage, xlab="Area Income",ylab = "Daily Internet Usage")
 plot(area.income,time.spent,xlab = "Area Income",ylab = "Daily Time Spent on the Internet")
 plot(time.spent,internet.usage, xlab="Daily Time spent", ylab="Daily Internet Usage")
-plot(age,time.spent,, xlab="Age", ylab="Daily Internet Usage")
